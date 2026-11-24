@@ -1,5 +1,25 @@
+
+# Python environment
 .venv/
+venv/
 __pycache__/
-*.pyc
+*.py[cod]
+
+# Environment variables and secrets
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# IOSA private data
 memory/data.json
+logs/
+*.log
+
+# IDE and operating system
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
