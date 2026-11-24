@@ -1,33 +1,27 @@
 
 $ErrorActionPreference = "Continue"
 
-$ProjectPath = "C:\IOSA"
-$Branch = "main"
+Set-Location "C:\IOSA"
 
-Set-Location $ProjectPath
+$Branch = "main"
+$Interval = 2
+$StableSeconds = 3
 
 Write-Host "====================================" -ForegroundColor Cyan
 Write-Host "       IOSA AUTO PUSH SYSTEM" -ForegroundColor Cyan
 Write-Host "====================================" -ForegroundColor Cyan
-Write-Host "Memantau perubahan file IOSA..." -ForegroundColor Green
-
-$Watcher = New-Object System.IO.FileSystemWatcher
-$Watcher.Path = $ProjectPath
-$Watcher.IncludeSubdirectories = $true
-$Watcher.NotifyFilter = [System.IO.NotifyFilters]'FileName, DirectoryName, LastWrite, Size'
-$Watcher.EnableRaisingEvents = $true
-
-$LastPush = Get-Date
+Write-Host "Pemantauan aktif..." -ForegroundColor Green
+Write-Host "Tekan Ctrl+C untuk berhenti."
 
 while ($true) {
-    Start-Sleep -Seconds 5
+    Start-Sleep -Seconds $Interval
 
     $Changes = git status --porcelain
 
     if ($Changes) {
-        Write-Host "Perubahan terdeteksi. Menunggu proses selesai..." -ForegroundColor Yellow
+        Write-Host "Perubahan terdeteksi!" -ForegroundColor Yellow
 
-        Start-Sleep -Seconds 10
+        Start-Sleep -Seconds $StableSeconds
 
         $Changes = git status --porcelain
 
@@ -41,10 +35,10 @@ while ($true) {
                 git push origin $Branch
 
                 if ($LASTEXITCODE -eq 0) {
-                    Write-Host "Berhasil push ke GitHub!" -ForegroundColor Green
+                    Write-Host "Berhasil tersimpan ke GitHub!" -ForegroundColor Green
                 }
                 else {
-                    Write-Host "Push gagal. Periksa koneksi atau konflik Git." -ForegroundColor Red
+                    Write-Host "Push gagal! Periksa koneksi GitHub." -ForegroundColor Red
                 }
             }
         }
